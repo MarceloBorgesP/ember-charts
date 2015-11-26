@@ -237,7 +237,7 @@ export default ChartComponent.extend(FloatingTooltipMixin,
 
     return {
       x: (d) => {
-        //Value is negative or Value is 0 with all else being negative
+        //Value is negative, or Value is 0 and all other data is negative
         if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
           return -this.get('labelPadding');
         } else {
@@ -246,7 +246,13 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) ? 'end' : 'start',
+      'text-anchor': (d) => {
+        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
+          return 'end';
+        } else {
+          return 'start';
+        }
+      },
       'stroke-width': 0
     };
   }),
@@ -258,7 +264,7 @@ export default ChartComponent.extend(FloatingTooltipMixin,
     // How to anchor the text depends on the direction of the bar
     return {
       x: (d) => {
-        //Value is negative or Value is 0 with all else being negative
+        //Value is negative, or Value is 0 and all other data is negative
         if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
           return xScale(0) - xScale(d.value) + this.get('labelPadding');
         } else {
@@ -267,7 +273,13 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) ? 'start' : 'end',
+      'text-anchor': (d) => {
+        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
+          return 'start';
+        } else {
+          return 'end';
+        }
+      },
       'stroke-width': 0
     };
   }),
