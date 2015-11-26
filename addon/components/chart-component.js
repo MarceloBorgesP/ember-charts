@@ -2,7 +2,7 @@ import Ember from 'ember';
 import ResizeHandlerMixin from '../mixins/resize-handler';
 import ColorableMixin from '../mixins/colorable';
 
-export default Ember.Component.extend(ColorableMixin, ResizeHandlerMixin, {
+const ChartComponent = Ember.Component.extend(ColorableMixin, ResizeHandlerMixin, {
   layoutName: 'components/chart-component',
   classNames: ['chart-frame', 'scroll-y'],
   isInteractive: true,
@@ -259,3 +259,5 @@ export default Ember.Component.extend(ColorableMixin, ResizeHandlerMixin, {
     }
   }
 });
+
+export default ChartComponent;
