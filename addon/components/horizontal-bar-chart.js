@@ -230,13 +230,14 @@ export default ChartComponent.extend(FloatingTooltipMixin,
     };
   }),
 
-  valueLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', function() {
+  valueLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', 'hasNegativeValues', 'hasPositiveValues', function() {
     var xScale = this.get('xScale');
     // Anchor the label 'labelPadding' away from the zero line
     // How to anchor the text depends on the direction of the bar
+
     return {
       x: (d) => {
-        if (d.value < 0) {
+        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
           return -this.get('labelPadding');
         } else {
           return xScale(d.value) - xScale(0) + this.get('labelPadding');
@@ -244,19 +245,20 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => d.value < 0 ? 'end' : 'start',
+      'text-anchor': (d) => ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) ? 'end' : 'start',
+      //'text-anchor': (d) => this.valueLabelFunc(d),
       'stroke-width': 0
     };
   }),
 
-  groupLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', function() {
+  groupLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', 'hasNegativeValues', 'hasPositiveValues', function() {
     var xScale = this.get('xScale');
 
     // Anchor the label 'labelPadding' away from the zero line
     // How to anchor the text depends on the direction of the bar
     return {
       x: (d) => {
-        if (d.value < 0) {
+        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
           return xScale(0) - xScale(d.value) + this.get('labelPadding');
         } else {
           return -this.get('labelPadding');
@@ -264,7 +266,8 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => d.value < 0 ? 'start' : 'end',
+      //'text-anchor': (d) => this.groupLabelFunc(d),
+      'text-anchor': (d) => ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) ? 'start' : 'end',
       'stroke-width': 0
     };
   }),
