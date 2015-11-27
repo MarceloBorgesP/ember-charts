@@ -230,15 +230,19 @@ export default ChartComponent.extend(FloatingTooltipMixin,
     };
   }),
 
-  valueLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', 'hasNegativeValues', 'hasPositiveValues', function() {
+  // Value is negative, or Value is 0 and all data is negative or 0
+  _isNotPositive: function(d) {
+    return ((d.value < 0) || ((d.value === 0) && this.get('hasAllNegativeValues')));
+  },
+
+  valueLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', function() {
     var xScale = this.get('xScale');
     // Anchor the label 'labelPadding' away from the zero line
     // How to anchor the text depends on the direction of the bar
 
     return {
       x: (d) => {
-        //Value is negative, or Value is 0 and all other data is negative
-        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
+        if (this._isNotPositive(d)) {
           return -this.get('labelPadding');
         } else {
           return xScale(d.value) - xScale(0) + this.get('labelPadding');
@@ -246,26 +250,19 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => {
-        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
-          return 'end';
-        } else {
-          return 'start';
-        }
-      },
+      'text-anchor': (d) => (this._isNotPositive(d)) ? 'end' : 'start',
       'stroke-width': 0
     };
   }),
 
-  groupLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', 'hasNegativeValues', 'hasPositiveValues', function() {
+  groupLabelAttrs: Ember.computed('xScale', 'barThickness', 'labelPadding', function() {
     var xScale = this.get('xScale');
 
     // Anchor the label 'labelPadding' away from the zero line
     // How to anchor the text depends on the direction of the bar
     return {
       x: (d) => {
-        //Value is negative, or Value is 0 and all other data is negative
-        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
+        if (this._isNotPositive(d))  {
           return xScale(0) - xScale(d.value) + this.get('labelPadding');
         } else {
           return -this.get('labelPadding');
@@ -273,13 +270,7 @@ export default ChartComponent.extend(FloatingTooltipMixin,
       },
       y: this.get('barThickness') / 2,
       dy: '.35em',
-      'text-anchor': (d) => {
-        if ((d.value < 0) || ((d.value === 0) && this.get('hasNegativeValues') && !this.get('hasPositiveValues'))) {
-          return 'start';
-        } else {
-          return 'end';
-        }
-      },
+      'text-anchor': (d) => (this._isNotPositive(d)) ? 'start' : 'end',
       'stroke-width': 0
     };
   }),
