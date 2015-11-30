@@ -70,7 +70,7 @@ export default ChartComponent.extend(LegendMixin, TimeSeriesLabelerMixin, Floati
   // ----------------------------------------------------------------------------
 
   // Combine all data for testing purposes
-  finishedData: Ember.computed('_groupedLineData.@each.values', '_groupedBarData.@each', function() {
+  finishedData: Ember.computed('_groupedLineData.@each.values', '_groupedBarData.[]',, function() {
     return {
       lineData: this.get('_groupedLineData'),
       groupedBarData: this.get('_groupedBarData')
@@ -276,7 +276,7 @@ export default ChartComponent.extend(LegendMixin, TimeSeriesLabelerMixin, Floati
 
   // this method seems very flaky to me; making padding by changing domain
   // convention is to change range
-  barDataExtent: Ember.computed('timeDelta', '_groupedBarData.@each', function() {
+  barDataExtent: Ember.computed('timeDelta', '_groupedBarData.[]', function() {
     var timeDelta = this.get('timeDelta');
     var groupedBarData = this.get('_groupedBarData');
     if (Ember.isEmpty(groupedBarData)) {

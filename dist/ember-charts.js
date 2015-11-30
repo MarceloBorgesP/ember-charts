@@ -2283,7 +2283,7 @@ define('ember-charts/components/time-series-chart', ['exports', 'module', 'ember
     // ----------------------------------------------------------------------------
 
     // Combine all data for testing purposes
-    finishedData: _Ember['default'].computed('_groupedLineData.@each.values', '_groupedBarData.@each', function () {
+    finishedData: _Ember['default'].computed('_groupedLineData.@each.values', '_groupedBarData.[]', function () {
       return {
         lineData: this.get('_groupedLineData'),
         groupedBarData: this.get('_groupedBarData')
@@ -2494,7 +2494,7 @@ define('ember-charts/components/time-series-chart', ['exports', 'module', 'ember
 
     // this method seems very flaky to me; making padding by changing domain
     // convention is to change range
-    barDataExtent: _Ember['default'].computed('timeDelta', '_groupedBarData.@each', function () {
+    barDataExtent: _Ember['default'].computed('timeDelta', '_groupedBarData.[]', function () {
       var timeDelta = this.get('timeDelta');
       var groupedBarData = this.get('_groupedBarData');
       if (_Ember['default'].isEmpty(groupedBarData)) {
